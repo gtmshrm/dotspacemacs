@@ -30,7 +30,8 @@ values."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(haskell
+   '(
+     haskell
      python
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
@@ -58,6 +59,7 @@ values."
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages
    '(
+     snazzy-theme
      doom-themes
      color-theme-sanityinc-tomorrow
      )
@@ -133,6 +135,9 @@ values."
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(
+                         base16-gruvbox-dark-hard
+                         base16-grayscale-dark
+                         doom-tomorrow-night
                          doom-city-lights
                          sanityinc-tomorrow-blue
                          spacemacs-dark
@@ -142,7 +147,7 @@ values."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
-   dotspacemacs-default-font '("Iosevka"
+   dotspacemacs-default-font '("xos4 terminus"
                                :size 11
                                :weight normal
                                :width normal
@@ -320,11 +325,44 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
-  ;; Mode line
-  (setq powerline-default-separator 'slant)
+
   ;; Toggle battery and time because xmobar is disabled at the moment
-  (spacemacs/toggle-mode-line-battery-on)
-  (spacemacs/toggle-display-time-on)
+  ;; (spacemacs/toggle-mode-line-battery-on)
+  ;; (spacemacs/toggle-display-time-on)
+
+  ;; =======================================================================
+  ;; Spaceline
+
+  ;; Install fonts: M-x all-the-icons-install-fonts
+  (use-package all-the-icons
+    :ensure t)
+
+  (use-package powerline
+    :ensure t)
+
+  (use-package spaceline
+    :ensure t
+    :pin melpa
+    :config (progn
+              (require 'spaceline-config)
+              ;;(spaceline-spacemacs-theme)))
+              ))
+
+  (use-package spaceline-all-the-icons
+    :ensure t
+    :pin melpa
+    :after spaceline
+    :config
+    ;;(spaceline-all-the-icons--setup-anzu)
+    (spaceline-all-the-icons--setup-package-updates)
+    (spaceline-all-the-icons--setup-paradox)
+    (spaceline-all-the-icons--setup-neotree)
+    (setq spaceline-all-the-icons-flycheck-alternate t)
+    (setq spaceline-all-the-icons-highlight-file-name t)
+    (setq spaceline-all-the-icons-separator-type (quote arrow))
+    (spaceline-all-the-icons-theme))
+
+  ;; =======================================================================
 
   ;; Mappings
   (setq-default evil-escape-key-sequence "jk")
@@ -366,11 +404,11 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("d2e9c7e31e574bf38f4b0fb927aaff20c1e5f92f72001102758005e53d77b8c9" "151bde695af0b0e69c3846500f58d9a0ca8cb2d447da68d7fbf4154dcf818ebc" "b35a14c7d94c1f411890d45edfb9dc1bd61c5becd5c326790b51df6ebf60f402" "d1b4990bd599f5e2186c3f75769a2c5334063e9e541e37514942c27975700370" "4a38c5fbfab06e761d43030d31b0970932188c5946b184211f0396b4125fbbc1" "93a0885d5f46d2aeac12bf6be1754faa7d5e28b27926b8aa812840fe7d0b7983" "3a3de615f80a0e8706208f0a71bbcc7cc3816988f971b6d237223b6731f91605" "f0dc4ddca147f3c7b1c7397141b888562a48d9888f1595d69572db73be99a024" "ecba61c2239fbef776a72b65295b88e5534e458dfe3e6d7d9f9cb353448a569e" "a3fa4abaf08cc169b61dea8f6df1bbe4123ec1d2afeb01c17e11fdc31fc66379" default)))
+    ("12670281275ea7c1b42d0a548a584e23b9c4e1d2dabb747fd5e2d692bcd0d39b" "6daa09c8c2c68de3ff1b83694115231faa7e650fdbb668bc76275f0f2ce2a437" "aea30125ef2e48831f46695418677b9d676c3babf43959c8e978c0ad672a7329" "d2e9c7e31e574bf38f4b0fb927aaff20c1e5f92f72001102758005e53d77b8c9" "151bde695af0b0e69c3846500f58d9a0ca8cb2d447da68d7fbf4154dcf818ebc" "b35a14c7d94c1f411890d45edfb9dc1bd61c5becd5c326790b51df6ebf60f402" "d1b4990bd599f5e2186c3f75769a2c5334063e9e541e37514942c27975700370" "4a38c5fbfab06e761d43030d31b0970932188c5946b184211f0396b4125fbbc1" "93a0885d5f46d2aeac12bf6be1754faa7d5e28b27926b8aa812840fe7d0b7983" "3a3de615f80a0e8706208f0a71bbcc7cc3816988f971b6d237223b6731f91605" "f0dc4ddca147f3c7b1c7397141b888562a48d9888f1595d69572db73be99a024" "ecba61c2239fbef776a72b65295b88e5534e458dfe3e6d7d9f9cb353448a569e" "a3fa4abaf08cc169b61dea8f6df1bbe4123ec1d2afeb01c17e11fdc31fc66379" default)))
  '(evil-want-Y-yank-to-eol t)
  '(package-selected-packages
    (quote
-    (intero hlint-refactor hindent helm-hoogle haskell-snippets dante lcr flycheck company-ghci company-ghc ghc haskell-mode company-cabal cmm-mode doom-city-light-theme doom-city-lights-theme ranger yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional helm-pydoc cython-mode company-anaconda anaconda-mode pythonic unfill org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download mwim mmm-mode markdown-toc markdown-mode htmlize helm-company helm-c-yasnippet gnuplot gh-md fuzzy company-statistics company auto-yasnippet yasnippet ac-ispell auto-complete doom-themes smeargle orgit magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit magit-popup git-commit ghub with-editor ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
+    (yasnippet-snippets string-inflection editorconfig dante lcr counsel-projectile counsel ivy haskell-mode flycheck treepy graphql doom-city-light-theme doom-city-lights-theme ranger yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional helm-pydoc cython-mode company-anaconda anaconda-mode pythonic unfill org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download mwim mmm-mode markdown-toc markdown-mode htmlize helm-company helm-c-yasnippet gnuplot gh-md fuzzy company-statistics company auto-yasnippet yasnippet ac-ispell auto-complete doom-themes smeargle orgit magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit magit-popup git-commit ghub with-editor ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
